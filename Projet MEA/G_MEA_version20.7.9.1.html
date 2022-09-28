@@ -1,0 +1,2004 @@
+﻿<!DOCTYPE html>
+<html>
+<head id="Head1" runat="server">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Mises en avant</title>
+
+	<link href="js/jquery-ui-1.11.0.custom/jquery-ui.min.css" rel="stylesheet" type="text/css">
+	<link href="js/jquery-ui-1.11.0.custom/jquery-ui.structure.min.css" rel="stylesheet" type="text/css">
+	<link href="js/jquery-ui-1.11.0.custom/jquery-ui.theme.min.css" rel="stylesheet" type="text/css">
+
+
+	<script type="text/javascript" src="js/construitTab.js"></script>
+	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="js/jqueryCookie.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.11.0.custom/jquery-ui.min.js"></script>
+
+
+	<script>
+		/*version : 20.7.9.1*/
+
+		/*var blabla={1:['','','2',''],2:['','','5','']};
+
+		//alert(blabla[1][2]+'ok');
+
+		//test fonctionnement tabs et objets.
+
+		*/
+
+		var visuelProg=true;
+		var rechercheId=false;
+
+		var couleurBrordureImt="#303835";
+
+		var tabs = {
+			'tous les films' : "Tous les films;&|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'tous les films / nouveau' : "Tous les films / Nouveau;&|1:1/|1:1/|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'toutes les series' : "Toutes les séries;&|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'toutes les series/ a laffiche' : "Toutes les séries/ A l'affiche;&|1:1/|1:1/|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'action' : "Action;&|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'comedie' : "Comédie;&|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'famille et kids' : "Famille et kids;&|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'famille et kids / films jeunesse' : "Famille et kids / Films jeunesse;&|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'emotion' : "Emotion;&|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'frisson' : "Frisson;&|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'demode' : "Démodé;&|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/rf",
+			'canalplay tv free' : "Canal Play TV Free;&|2:2/|1:1/|1:1/|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/|1:1/|1:1/rf",
+			'canalplay tv free abonne' : "Canal Play TV Free Abonné;&|2:2/|2:2/|1:1/|1:1/r&|1:1/|1:1/r&|1:1/|1:1/|1:1/|1:1/|1:1/|1:1/rf"
+		};
+
+		var tailles = {
+			'tous les films' : 9,
+			'tous les films / nouveau' : 12,
+			'toutes les series' : 9,
+			'toutes les series/ a laffiche' : 12,
+			'action' : 9,
+			'comedie' : 9,
+			'famille et kids' : 9,
+			'famille et kids / films jeunesse' : 9,
+			'emotion' : 9,
+			'frisson' : 9,
+			'demode' : 9,
+			'canalplay tv free' : 15,
+			'canalplay tv free abonne' : 12
+		};
+
+		var refs = {
+			'tous les films' : ['','','','','','','','',''],
+			'tous les films / nouveau' :  ['','','','','','','','','','','',''],
+			'toutes les series' : ['','','','','','','','',''],
+			'toutes les series/ a laffiche' : ['','','','','','','','','','','',''],
+			'action' : ['','','','','','','','',''],
+			'comedie' : ['','','','','','','','',''],
+			'famille et kids' : ['','','','','','','','',''],
+			'famille et kids / films jeunesse' : ['','','','','','','','',''],
+			'emotion' : ['','','','','','','','',''],
+			'frisson' : ['','','','','','','','',''],
+			'demode' : ['','','','','','','','',''],
+			'canalplay tv free' : ['','','','','','','','','','','','','','',''],
+			'canalplay tv free abonne' : ['','','','','','','','','','','','']
+		};
+
+		var titres = {
+			'tous les films' : ['','','','','','','','',''],
+			'tous les films / nouveau' :  ['','','','','','','','','','','',''],
+			'toutes les series' : ['','','','','','','','',''],
+			'toutes les series/ a laffiche' : ['','','','','','','','','','','',''],
+			'action' : ['','','','','','','','',''],
+			'comedie' : ['','','','','','','','',''],
+			'famille et kids' : ['','','','','','','','',''],
+			'famille et kids / films jeunesse' : ['','','','','','','','',''],
+			'emotion' : ['','','','','','','','',''],
+			'frisson' : ['','','','','','','','',''],
+			'demode' : ['','','','','','','','',''],
+			'canalplay tv free' : ['','','','','','','','','','','','','','',''],
+			'canalplay tv free abonne' : ['','','','','','','','','','','','']
+		};
+
+		cookieN='sauv01';
+		var id_titre = false;
+
+		litTab(cookieN); //on réactualise les tableaux en fonction du cookie.
+
+		//miseAJourTitreTemplate (); //des erreurs de lecture de cookie étant survenues (?), on réactualise les titres
+
+		/*test cookie*/
+
+		/*var str05 = "",i;
+
+		for(i=0; i<12; i++) {
+			str05+="titres["+i+"] = "+titres['canalplay tv free'][i]+"\n";
+		}
+
+		alert(str05);*/
+
+		/*-----------*/
+
+		function Scontains (str0, str) {
+			var i,c=str0.length,taille=str.length
+
+			for (i=0; i<c-taille; i++) {
+				if (str0.substring(i,i+taille)==str) return true;
+			}
+
+			return false;
+		}
+
+		//alert(Scontains('blabla','')); //test de Scontains
+
+
+		function M_ovCache (elt) {
+			elt.style.opacity = "0.3";
+			elt.style.filter="alpha(opacity=30)"; /*IE lt 8*/
+
+			elt.style.backgroundColor = 'white';
+		}
+
+		function M_ouCache (elt) {
+			elt.style.opacity = "0";
+			elt.style.filter="alpha(opacity=0)"; /*IE lt 8*/
+		}
+
+		function M_dCache(elt) {
+			elt.style.backgroundColor = 'black';
+		}	
+
+		function M_uCache(elt) {
+			elt.style.opacity = "0";
+			elt.style.filter="alpha(opacity=0)"; /*IE lt 8*/
+			elt.style.backgroundColor = 'white';
+		}
+
+
+		function M_ovCacheJUi(elt) {
+			if (!Scontains(""+elt.className,"ui-state-hover")) elt.className=(""+elt.className)+" ui-state-hover";
+		}
+
+		function M_ouCacheJUi(elt) {
+			/*if (Scontains(""+elt.className," ui-state-hover"))*/ elt.className=(""+elt.className).substring(0,((""+elt.className).length)-15);
+		}
+
+		function M_dCacheJUi(elt) {
+			if (!Scontains(""+elt.className,"ui-state-active")) elt.className=(""+elt.className)+" ui-state-active";
+		}	
+
+		function M_uCacheJUi(elt) {
+			if (Scontains(""+elt.className," ui-state-active")) elt.className=(""+elt.className).substring(0,((""+elt.className).length)-16);
+			elt.className=(""+elt.className).substring(0,((""+elt.className).length)-15);
+		}
+	
+		function M_sCacheJUi(elt) {
+			if (!Scontains(""+elt.className,"ui-state-focus")) elt.className=(""+elt.className)+" ui-state-focus";
+		}	
+
+		function M_bCacheJUi(elt) {
+			if (Scontains(""+elt.className," ui-state-focus")) elt.className=(""+elt.className).substring(0,((""+elt.className).length)-15);
+		}
+
+
+
+		function Ttemplate () {
+			var template=document.getElementById('tab1').parentNode.id;
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			return template;
+		}
+
+		function apercuImt () {
+			var template=document.getElementById('tab1').parentNode.id,tmp=0,input="",titre="";
+
+			modifieRadioInput (); //met à jour le radio bouton par rapport à la ref entrée.
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			tmp = document.getElementById('identifiant_image').name;
+			input = document.getElementById('identifiant_image').value;
+
+			if (input!="") {
+				document.getElementById('imt'+tmp).src = calculUrl (input);
+			}
+
+			else {
+				document.getElementById('imt'+tmp).src = "Images/Common/photoManquante.jpg";
+			}
+		}
+
+		function met_a_jour_imt () {
+			var template=document.getElementById('tab1').parentNode.id,tmp=0,input="",titre="";
+
+			modifieRadioInput (); //met à jour le radio bouton par rapport à la ref entrée.
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			tmp = document.getElementById('identifiant_image').name;
+			input = document.getElementById('identifiant_image').value;
+
+			if (input!="") {
+				if (id_titre) document.getElementById("id_img"+(tmp)).innerHTML="Identifiant : <br/>"+input;
+				document.getElementById('rp'+(tmp)).value = input;
+				document.getElementById('imt'+tmp).src = calculUrl (input);
+				refs[template][tmp-1] = input;
+				miseAJourTitre (input,tmp,template);
+				if (id_titre) document.getElementById('id_titre'+tmp).style.visibility="visible";
+			}
+
+			else {
+				if (id_titre) document.getElementById("id_img"+(tmp)).innerHTML="Identifiant : <br/>"+"";
+				document.getElementById('rp'+(tmp)).value = "";
+				document.getElementById('imt'+tmp).src = "Images/Common/photoManquante.jpg";
+				document.getElementById('imt'+tmp).title="";
+				refs[template][tmp-1] = "";
+				titres[template][tmp-1] = "";
+				if (id_titre) document.getElementById('id_titre'+tmp).style.visibility="hidden";
+			}
+
+			metAJourCookie (cookieN);
+		}
+
+		var urlAffichees = false;
+			
+		var taille = 1;
+		var compte=1;
+
+		function metAJourUrl () {
+			var i;
+
+			for (i=0; i<taille; i++) metAJourUrlImage((i+1));
+
+			//afficheTitres ();
+
+			metAJourCookie (cookieN);
+		}
+
+		function afficheTitresTemplate () {
+			var i, c,str="";
+			var template=document.getElementById('tab1').parentNode.id;
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			for (i=0,c=tailles[template]; i<c; i++) {
+				str+=template+' : '+titres[template]+'\n';
+			}
+
+			alert((compte++)+': '+str);
+		}
+
+		function afficheTitresTemplate2 () {
+			var i, c,str="";
+			var template=document.getElementById('tab1').parentNode.id;
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			for (i in titres) {
+				str+='- '+i+' : '+titres[i]+'\n';
+			}
+
+			alert((compte++)+': '+str);
+		}
+
+
+		function metAJourUrlImage (tmp) {
+			var template=document.getElementById('tab1').parentNode.id,input="",titre="";
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			input = document.getElementById('rp'+tmp).value;
+
+			if (input!="") {
+				if (id_titre) document.getElementById("id_img"+(tmp)).innerHTML="Identifiant : <br/>"+input;
+				document.getElementById('imt'+tmp).src = calculUrl(input);
+				refs[template][tmp-1] = input;
+				miseAJourTitre (input,tmp,template);
+				if (id_titre) document.getElementById('id_titre'+tmp).style.visibility="visible";
+			}
+
+			else {
+				if (id_titre) document.getElementById("id_img"+(tmp)).innerHTML="Identifiant : <br/>"+"";
+				document.getElementById('imt'+tmp).src = "Images/Common/photoManquante.jpg";
+				document.getElementById('imt'+tmp).title="";
+				refs[template][tmp-1] = "";
+				titres[template][tmp-1] = "";
+				if (id_titre) document.getElementById('id_titre'+tmp).style.visibility="hidden";
+			}
+
+			//metAJourCookie (cookieN);
+		}
+
+		function calculUrl (ref) {
+			var res="http://canalplay-publishing.canal-plus.com/movies/"+ref+"/pictures/"+ref+"_pivot_large.jpg";
+
+			if (!ref) return res;
+
+			if (ref.charAt(0)=='N' || ref.charAt(0)=='n') res="http://canalplay-publishing.canal-plus.com/movies/"+ref.substring(1,ref.length)+"/pictures/"+ref.substring(1,ref.length)+"_pivot_large.jpg";
+			else if (ref.charAt(0)=='A' || ref.charAt(0)=='a') res="http://canalplay-publishing.canal-plus.com/albums/"+ref.substring(1,ref.length)+"/pictures/"+ref.substring(1,ref.length)+"_pivot_large.jpg";
+			else if (ref.charAt(0)=='D' || ref.charAt(0)=='d') res="http://canalplay-publishing.canal-plus.com/movies/"+ref.substring(1,ref.length)+"/pictures/"+ref.substring(1,ref.length)+"_pivot_large_dark.jpg";
+			else if (ref.charAt(0)=='L' || ref.charAt(0)=='l') res="http://canalplay-publishing.canal-plus.com/movies/"+ref.substring(1,ref.length)+"/pictures/"+ref.substring(1,ref.length)+"_pivot_large_light.jpg";
+			else res="http://canalplay-publishing.canal-plus.com/movies/"+ref+"/pictures/"+ref+"_pivot_large.jpg";
+
+			//alert(res);
+
+			return res;
+		}
+
+		function metAJourTitres2 () {
+			var i, template=document.getElementById('tab1').parentNode.id;
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			for (i=0; i<taille; i++) document.getElementById('rp'+(i+1)).value = refs[template][i];
+			metAJourUrl ();
+		}
+
+		function afficheUrl () {
+			var i, template=document.getElementById('tab1').parentNode.id;
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			if (urlAffichees) {
+				for (i=0; i<taille; i++) document.getElementById('fp'+(i+1)).style.display = "none";
+
+				document.getElementById('cache01').title="Activer le mode saisie rapide";
+				document.getElementById('met_a_jour').style.display = "none";
+
+				metAJourUrl (); //met à jour avant de fermer les inputs.
+
+				urlAffichees = false;
+			}
+
+			else {
+				for (i=0; i<taille; i++) {
+					document.getElementById('imt'+(i+1)).title = titres[template][i];
+					document.getElementById('rp'+(i+1)).value = refs[template][i];
+					document.getElementById('fp'+(i+1)).style.display = "block";
+				}
+
+				document.getElementById('met_a_jour').style.display = "block";
+				document.getElementById('cache01').title="Désactiver le mode saisie rapide";
+
+				urlAffichees = true;
+			}
+		}
+
+		var fond = false;
+		var aideF = false;
+
+		var barreRecherche = false;
+
+		var liLength=0;
+		var lesIds=[], lesNoms=[];
+
+		function fondNoir (tmp) {
+			var template=document.getElementById('tab1').parentNode.id, val="";
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			if (tmp==0) tmp = document.getElementById('identifiant_image').name;
+			else  document.getElementById('identifiant_image').name = tmp;
+
+			if (fond) {
+				document.getElementById('fond_noir1').style.display="none";
+				document.getElementById('pop-up').style.display="none";
+
+				document.getElementById('fermePop-up').style.marginLeft="0px"; //corrige un bug sous IE 8.
+
+				document.getElementById('cache'+tmp).style.zIndex="6";
+
+				val = refs[template][tmp-1];
+	
+				if (val=="") document.getElementById('imt'+(tmp)).src = "Images/Common/photoManquante.jpg";
+				else document.getElementById('imt'+(tmp)).src = calculUrl (val);
+
+				document.getElementById('imt'+tmp).style.border="3px solid "+couleurBrordureImt; //il faut que ce soit de la même couleur que le fond
+				document.getElementById('imt'+tmp).style.zIndex=0;
+
+				if(document.getElementById('recherche_input').value=="") {
+					document.getElementById('listeRec').style.visibility="hidden";
+					document.getElementById('pop-up').style.width="";
+					document.getElementById('barre').style.width="420px";
+
+					document.getElementById('reduireRech').style.visibility="hidden";
+					//document.getElementById('cache07').style.visibility="hidden";
+
+					barreRecherche = false;
+				}
+
+				fond = false;
+			}
+
+			else {
+				document.getElementById('fond_noir1').style.display="block";
+				document.getElementById('pop-up').style.display="block";
+
+				document.getElementById('identifiant_image').focus();
+
+				document.getElementById('identifiant_image').value=refs[template][tmp-1];
+
+				modifieRadioInput ();
+
+				document.getElementById('cache'+tmp).style.zIndex="2";
+				document.getElementById('imt'+tmp).title = titres[template][tmp-1];
+
+				document.getElementById('fermePop-up').style.marginLeft="388px";
+
+				document.getElementById('imt'+tmp).style.border="3px groove #364DF6";
+				/*document.getElementById('case'+tmp).style.width=document.getElementById('case'+tmp).style.width+20;
+				document.getElementById('case'+tmp).style.heigth=document.getElementById('case'+tmp).style.heigth+20;*/
+				document.getElementById('imt'+tmp).style.zIndex=1;
+
+				if (barreRecherche) {
+					document.getElementById('pop-up').style.width="600px";
+					document.getElementById('barre').style.width="665px";
+					document.getElementById('fermePop-up').style.marginLeft="633px";
+	
+					document.getElementById('listeRec').style.visibility="visible";
+				}
+
+				fond = true;
+			}
+
+			imcN=0;
+		}
+
+		function enleveBarreRecherche () {
+			document.getElementById('listeRec').style.visibility="hidden";
+			document.getElementById('pop-up').style.width="";
+			document.getElementById('barre').style.width="420px";
+
+			document.getElementById('reduireRech').style.visibility="hidden";
+			//document.getElementById('cache07').style.visibility="hidden";
+
+			document.getElementById('fermePop-up').style.marginLeft="388px";
+
+			barreRecherche = false;
+		}
+
+		function fondNoir2 () {
+			if (aideF) {
+				document.getElementById('aide').style.display="none";
+				document.getElementById('fond_noir2').style.display="none";
+
+				aideF = false;
+			}
+
+			else {
+				document.getElementById('aide').style.display="block";
+				document.getElementById('fond_noir2').style.display="block";
+
+				aideF = true;
+			}
+		}
+
+		function litListeOperateur (elt) {
+			urlAffichees = false;
+
+			var template = ""+elt.options[elt.selectedIndex].innerHTML;
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			if (template=="INFINITY TV BOUYGTEL ET ORANGE") {
+				document.getElementById('TemplateM').style.visibility='visible';
+				document.getElementById('template').style.visibility='visible';
+
+				litListeTemplate (document.getElementById('templatesId'));
+			}
+
+			else {
+				document.getElementById('TemplateM').style.visibility='hidden';
+				document.getElementById('template').style.visibility='hidden';
+
+				if (template=="CANALPLAY TV FREE ABONNE") document.getElementById("article").innerHTML=construitTab3(tabs[template.toLowerCase()],template.toLowerCase(),true);
+				else document.getElementById("article").innerHTML=construitTab3(tabs[template.toLowerCase()],template.toLowerCase(),false);
+				taille=tailles[template.toLowerCase()];
+
+				document.getElementById('fond_noir1').style.zIndex=taille+1;
+				document.getElementById('pop-up').style.zIndex=taille+2;
+				document.getElementById('fond_noir2').style.zIndex=taille+3;
+				document.getElementById('aide').style.zIndex=taille+4;
+				document.getElementById('aideP').style.zIndex=taille+5;
+
+				for (i=0; i<taille; i++) {
+					template=document.getElementById('tab1').parentNode.id;
+					
+					if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+					
+					val = refs[template][i];
+	
+					if (val=="") document.getElementById('imt'+(i+1)).src = "Images/Common/photoManquante.jpg";
+					else document.getElementById('imt'+(i+1)).src = calculUrl (val);
+
+					document.getElementById('imt'+(i+1)).title = titres[template][i];
+				}
+			}
+
+			id_titre = false;
+
+			//alert('litListeOperateur');
+			//afficheTitres ();
+			metAJourTitres2 (); // en attendant de corriger le bug de lecture du cookie des titres.
+
+			//$( "#imt1" ).css( "border", "3px solid red" );
+			//document.getElementById("imt1").style.border="3px solid red";
+		}
+
+		function litListeTemplate (elt) {
+			urlAffichees = false;
+
+			var i, template = elt.options[elt.selectedIndex].innerHTML.toLowerCase(), val="";
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			if (template=="canal play free abonne") document.getElementById("article").innerHTML=construitTab3(tabs[template],template,true);
+			else  document.getElementById("article").innerHTML=construitTab3(tabs[template],template,false);
+			taille=tailles[template];
+
+			for (i=0; i<taille; i++) {
+				template=document.getElementById('tab1').parentNode.id;
+					
+				if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+					
+				val = refs[template][i];
+
+				if (val=="") document.getElementById('imt'+(i+1)).src = "Images/Common/photoManquante.jpg";
+				else document.getElementById('imt'+(i+1)).src = calculUrl (val);
+
+				document.getElementById('imt'+(i+1)).title = titres[template][i];
+			}
+
+			id_titre = false;
+			document.getElementById('fond_noir1').style.zIndex=taille+1;
+			document.getElementById('pop-up').style.zIndex=taille+2;
+			document.getElementById('fond_noir2').style.zIndex=taille+3;
+			document.getElementById('aide').style.zIndex=taille+4;
+			document.getElementById('aideP').style.zIndex=taille+5;
+
+			//alert('litListeTemplate');
+			//afficheTitres ();
+			metAJourTitres2 (); // en attendant de corriger le bug de lecture du cookie des titres.
+		}
+
+		function affiche_imc (tmp) {
+			document.getElementById('imc'+tmp).style.visibility="visible";
+			document.getElementById('cache'+tmp).style.visibility="visible";
+		}
+
+		function enleve_imc (tmp) {
+			document.getElementById('imc'+tmp).style.visibility="hidden";
+			document.getElementById('cache'+tmp).style.visibility="hidden";
+		}
+
+		function litCookie0(str) {
+			var cookContent = document.cookie, cookEnd, i, j;
+			var str = str + "=";
+ 
+			for (i=0, c=cookContent.length; i<c; i++) {
+				j = i + str.length;
+
+				if (cookContent.substring(i, j) == str) {
+					cookEnd = cookContent.indexOf(";", j);
+
+					if (cookEnd == -1) {
+						cookEnd = cookContent.length;
+					}
+
+					return decodeURIComponent(cookContent.substring(j, cookEnd));
+				}
+			}
+
+			return null;
+		}
+
+		function litCookie (str) {
+			return $.cookie(str);
+		}
+
+		function litCookie1(str) {
+			var i,j=0,c=0, cookieContent = document.cookie, str0="";
+
+			for (i=0, c=cookieContent.length-str.length; i<c; i++) {
+				if (cookContent.substring(i,i+str.length)==str) {
+					j=i;
+
+					while (cookContent.charAt(i)!='=') j++;
+					j++; //à '=', on avance le curseur de 1.
+
+					while (cookContent.charAt(j)!=';') str0+=cookContent.charAt(j);					
+				}
+			}
+
+			return str0;
+		}
+
+		function setCookie(name, val,date) {
+			$.cookie(name, val, { expires: date*365 }); //Create expiring cookie, valid across entire site
+		}
+
+		function setCookie0(name, val,date) {
+			var today = new Date(), expires = new Date();
+			expires.setTime(today.getTime() + (date*365*24*60*60*1000));
+			document.cookie = name + "=" + encodeURIComponent(val) + ";expires=" + expires.toGMTString();
+		}
+
+		function deleteCookie(name) {
+			setCookie(name,"",-1);
+		}
+
+		function metAJourCookie (nom) {
+			var i, refT="", titresT="", str="",str01="";
+
+			//afficheTitres();
+
+			for (i in refs) {
+
+				if(!refs.hasOwnProperty(i)) {continue;}
+
+				refT+=refs[i]+':';
+			}
+
+			refT+="|";
+
+			for (i in titres) {
+				if(!titres.hasOwnProperty(i)) {continue;}
+
+				titresT+=titres[i]+':';
+			}
+
+			/*for (i in titres) {
+				if(!titres.hasOwnProperty(i)) {continue;}
+
+				str+=titres[i]+'\n';
+			}
+
+			alert(str);*/
+			//alert(titres[Ttemplate ()]);
+			//afficheTitres ();
+			//litTab(cookieN);
+			//alert(str01);
+
+			//alert(cookie);
+
+			/*création du tableau*/
+
+			setCookie (nom,""+refT+titresT,1);
+
+			/* setCookie */
+		}
+
+		function affTab (tab) {
+			var i,c,str="-";
+
+			for (i=0,c=tab.length; i<c; i++) {
+				str+=tab[i]+'\n-';
+			}
+
+			alert(str);
+		}
+
+		function litTab (nom) {
+			var str=litCookie(nom),i;
+
+			//alert(str);	
+
+			if (litCookie()!=null&&litCookie()!="") {
+				var str0 = str.split("|"); //tab.length=2
+	
+				var str01 = str0[0].split(':');
+				var str02 = str0[1].split(':');
+
+				//alert(str02[0]);
+
+				refs = {
+					'tous les films' : [str01[0].split(',')[0],str01[0].split(',')[1],str01[0].split(',')[2],str01[0].split(',')[3],str01[0].split(',')[4],str01[0].split(',')[5],str01[0].split(',')[6],str01[0].split(',')[7],str01[0].split(',')[8]],
+					'tous les films / nouveau' :  [str01[1].split(',')[0],str01[1].split(',')[1],str01[1].split(',')[2],str01[1].split(',')[3],str01[1].split(',')[4],str01[1].split(',')[5],str01[1].split(',')[6],str01[1].split(',')[7],str01[1].split(',')[8],str01[1].split(',')[9],str01[1].split(',')[10],str01[1].split(',')[11]],
+					'toutes les series' : [str01[2].split(',')[0],str01[2].split(',')[1],str01[2].split(',')[2],str01[2].split(',')[3],str01[2].split(',')[4],str01[2].split(',')[5],str01[2].split(',')[6],str01[2].split(',')[7],str01[2].split(',')[8]],
+					'toutes les series/ a laffiche' : [str01[3].split(',')[0],str01[3].split(',')[1],str01[3].split(',')[2],str01[3].split(',')[3],str01[3].split(',')[4],str01[3].split(',')[5],str01[3].split(',')[6],str01[3].split(',')[7],str01[3].split(',')[8],str01[3].split(',')[9],str01[3].split(',')[10],str01[3].split(',')[11]],
+					'action' : [str01[4].split(',')[0],str01[4].split(',')[1],str01[4].split(',')[2],str01[4].split(',')[3],str01[4].split(',')[4],str01[4].split(',')[5],str01[4].split(',')[6],str01[4].split(',')[7],str01[4].split(',')[8]],
+					'comedie' : [str01[5].split(',')[0],str01[5].split(',')[1],str01[5].split(',')[2],str01[5].split(',')[3],str01[5].split(',')[4],str01[5].split(',')[5],str01[5].split(',')[6],str01[5].split(',')[7],str01[5].split(',')[8]],
+					'famille et kids' : [str01[6].split(',')[0],str01[6].split(',')[1],str01[6].split(',')[2],str01[6].split(',')[3],str01[6].split(',')[4],str01[6].split(',')[5],str01[6].split(',')[6],str01[6].split(',')[7],str01[6].split(',')[8]],
+					'famille et kids / films jeunesse' : [str01[7].split(',')[0],str01[7].split(',')[1],str01[7].split(',')[2],str01[7].split(',')[3],str01[7].split(',')[4],str01[7].split(',')[5],str01[7].split(',')[6],str01[7].split(',')[7],str01[7].split(',')[8]],
+					'emotion' : [str01[8].split(',')[0],str01[8].split(',')[1],str01[8].split(',')[2],str01[8].split(',')[3],str01[8].split(',')[4],str01[8].split(',')[5],str01[8].split(',')[6],str01[8].split(',')[7],str01[8].split(',')[8]],
+					'frisson' : [str01[9].split(',')[0],str01[9].split(',')[1],str01[9].split(',')[2],str01[9].split(',')[3],str01[9].split(',')[4],str01[9].split(',')[5],str01[9].split(',')[6],str01[9].split(',')[7],str01[9].split(',')[8]],
+					'demode' : [str01[10].split(',')[0],str01[10].split(',')[1],str01[10].split(',')[2],str01[10].split(',')[3],str01[10].split(',')[4],str01[10].split(',')[5],str01[10].split(',')[6],str01[10].split(',')[7],str01[10].split(',')[8]],
+					'canalplay tv free' : [str01[11].split(',')[0],str01[11].split(',')[1],str01[11].split(',')[2],str01[11].split(',')[3],str01[11].split(',')[4],str01[11].split(',')[5],str01[11].split(',')[6],str01[11].split(',')[7],str01[11].split(',')[8],str01[11].split(',')[9],str01[11].split(',')[10],str01[11].split(',')[11],str01[11].split(',')[12],str01[11].split(',')[13],str01[11].split(',')[14]],
+					'canalplay tv free abonne' : [str01[12].split(',')[0],str01[12].split(',')[1],str01[12].split(',')[2],str01[12].split(',')[3],str01[12].split(',')[4],str01[12].split(',')[5],str01[12].split(',')[6],str01[12].split(',')[7],str01[12].split(',')[8],str01[12].split(',')[9],str01[12].split(',')[10],str01[12].split(',')[11]]
+				};
+		
+				titres = {
+					'tous les films' : [str02[0].split(',')[0],str02[0].split(',')[1],str02[0].split(',')[2],str02[0].split(',')[3],str02[0].split(',')[4],str02[0].split(',')[5],str02[0].split(',')[6],str02[0].split(',')[7],str02[0].split(',')[8]],
+					'tous les films / nouveau' :  [str02[1].split(',')[0],str02[1].split(',')[1],str02[1].split(',')[2],str02[1].split(',')[3],str02[1].split(',')[4],str02[1].split(',')[5],str02[1].split(',')[6],str02[1].split(',')[7],str02[1].split(',')[8],str02[1].split(',')[9],str02[1].split(',')[10],str02[1].split(',')[11]],
+					'toutes les series' : [str02[2].split(',')[0],str02[2].split(',')[1],str02[2].split(',')[2],str02[2].split(',')[3],str02[2].split(',')[4],str02[2].split(',')[5],str02[2].split(',')[6],str02[2].split(',')[7],str02[2].split(',')[8]],
+					'toutes les series/ a laffiche' : [str02[3].split(',')[0],str02[3].split(',')[1],str02[3].split(',')[2],str02[3].split(',')[3],str02[3].split(',')[4],str02[3].split(',')[5],str02[3].split(',')[6],str02[3].split(',')[7],str02[3].split(',')[8],str02[3].split(',')[9],str02[3].split(',')[10],str02[3].split(',')[11]],
+					'action' : [str02[4].split(',')[0],str02[4].split(',')[1],str02[4].split(',')[2],str02[4].split(',')[3],str02[4].split(',')[4],str02[4].split(',')[5],str02[4].split(',')[6],str02[4].split(',')[7],str02[4].split(',')[8]],
+					'comedie' : [str02[5].split(',')[0],str02[5].split(',')[1],str02[5].split(',')[2],str02[5].split(',')[3],str02[5].split(',')[4],str02[5].split(',')[5],str02[5].split(',')[6],str02[5].split(',')[7],str02[5].split(',')[8]],
+					'famille et kids' : [str02[6].split(',')[0],str02[6].split(',')[1],str02[6].split(',')[2],str02[6].split(',')[3],str02[6].split(',')[4],str02[6].split(',')[5],str02[6].split(',')[6],str02[6].split(',')[7],str02[6].split(',')[8]],
+					'famille et kids / films jeunesse' : [str02[7].split(',')[0],str02[7].split(',')[1],str02[7].split(',')[2],str02[7].split(',')[3],str02[7].split(',')[4],str02[7].split(',')[5],str02[7].split(',')[6],str02[7].split(',')[7],str02[7].split(',')[8]],
+					'emotion' : [str02[8].split(',')[0],str02[8].split(',')[1],str02[8].split(',')[2],str02[8].split(',')[3],str02[8].split(',')[4],str02[8].split(',')[5],str02[8].split(',')[6],str02[8].split(',')[7],str02[8].split(',')[8]],
+					'frisson' : [str02[9].split(',')[0],str02[9].split(',')[1],str02[9].split(',')[2],str02[9].split(',')[3],str02[9].split(',')[4],str02[9].split(',')[5],str02[9].split(',')[6],str02[9].split(',')[7],str02[9].split(',')[8]],
+					'demode' : [str02[10].split(',')[0],str02[10].split(',')[1],str02[10].split(',')[2],str02[10].split(',')[3],str02[10].split(',')[4],str02[10].split(',')[5],str02[10].split(',')[6],str02[10].split(',')[7],str02[10].split(',')[8]],
+					'canalplay tv free' : [str02[11].split(',')[0],str02[11].split(',')[1],str02[11].split(',')[2],str02[11].split(',')[3],str02[11].split(',')[4],str02[11].split(',')[5],str02[11].split(',')[6],str02[11].split(',')[7],str02[11].split(',')[8],str02[11].split(',')[9],str02[11].split(',')[10],str02[11].split(',')[11],str02[11].split(',')[12],str02[11].split(',')[13],str02[11].split(',')[14]],
+					'canalplay tv free abonne' : [str02[12].split(',')[0],str02[12].split(',')[1],str02[12].split(',')[2],str02[12].split(',')[3],str02[12].split(',')[4],str02[12].split(',')[5],str02[12].split(',')[6],str02[12].split(',')[7],str02[12].split(',')[8],str02[12].split(',')[9],str02[12].split(',')[10],str02[12].split(',')[11]]
+				};
+			}
+		}
+
+		function modifieRadioInput () {
+			var i,j=0;
+
+			var input = document.getElementById('identifiant_image').value;
+
+			if (input=="") return;
+
+			if (!input=="") {
+				if (input.charAt(0)=='N' || input.charAt(0)=='n' || (!isNaN(parseInt(input.charAt(0))))) j=0;
+				if (input.charAt(0)=='L' || input.charAt(0)=='l') j=1;
+				if (input.charAt(0)=='D' || input.charAt(0)=='d') j=2;
+				if (input.charAt(0)=='A' || input.charAt(0)=='a') j=3;
+	
+				if (j<3) {
+					document.getElementById('spanRadio2').style.visibility="visible";
+					document.getElementById('radioProg').checked=true;
+					document.getElementById('radioAlbum').checked=false;
+				}
+	
+				if (j==0) document.getElementById('radio0').checked=true;
+				if (j==1) document.getElementById('radio1').checked=true;
+				if (j==2) document.getElementById('radio2').checked=true;
+				if (j==3) {
+					document.getElementById('spanRadio2').style.visibility="hidden";
+					document.getElementById('radioAlbum').checked=true;
+					for(i=0; i<3; i++) document.getElementById('radio'+i).checked=false;
+				}
+			}
+		}
+
+		function modifieInputDialog (j) {
+			var i, ref=-1;
+
+			if (j==-1) ref=-1;
+			if (j==0) {ref=''; document.getElementById('radio0').cheked=true; }
+			if (j==1) {ref='L'; document.getElementById('radio1').cheked=true; }
+			if (j==2) {ref='D'; document.getElementById('radio2').cheked=true; }
+			if (j==3) {ref='A'; document.getElementById('radioAlbum').cheked=true; }
+
+			//alert(ref);
+
+			var input = document.getElementById('identifiant_image').value;
+			var tmp = document.getElementById('identifiant_image').name;
+
+			//document.getElementById('identifiant_image').value='5';
+
+			//alert();
+
+			if (ref!=-1 && input!="") {
+				if (input.charAt(0)=='N' || input.charAt(0)=='A' || input.charAt(0)=='L' || input.charAt(0)=='D' || input.charAt(0)=='n' || input.charAt(0)=='a' || input.charAt(0)=='l' || input.charAt(0)=='d') document.getElementById('identifiant_image').value = ""+ref+input.substring(1,input.length);
+				else  document.getElementById('identifiant_image').value = ""+ref+input;
+			}
+
+			if (j==0 || j==1 || j==2) {
+				document.getElementById('radioProg').checked=true;
+				document.getElementById('radioAlbum').checked=false;
+			}
+
+			if (j==4) { //programme
+				visuelProg=true;
+				document.getElementById('spanRadio2').style.visibility="visible";
+				document.getElementById('radio0').checked=true;
+				modifieInputDialog (0,document.getElementById('radio1'));
+			}
+
+			if (j==3) { //album
+				document.getElementById('spanRadio2').style.visibility="hidden";
+				visuelProg=false;
+				for(i=0; i<3; i++) document.getElementById('radio'+i).checked=false;
+			}
+
+			if (j<5) apercuImt ();
+
+			if (j==5) {
+				rechercheId=true;
+			}
+
+			if (j==6) {
+				rechercheId=false;
+			}
+		}
+
+		function actionneRecherche () {
+			var input=document.getElementById('recherche_input').value;
+
+			document.getElementById('pop-up').style.width="600px";
+			document.getElementById('barre').style.width="665px";
+			document.getElementById('fermePop-up').style.marginLeft="633px";
+
+			document.getElementById('listeRec').style.visibility="visible";
+
+			document.getElementById('reduireRech').style.visibility="visible";
+			//document.getElementById('cache07').style.visibility="visible";
+
+			barreRecherche=true;
+
+			if (input!="") {
+				if (rechercheId) {
+					if (visuelProg) ecritLiId (input);
+					else  ecritLiIdAlbum (input);
+	
+				}
+				else {
+					if (visuelProg) ecritLiTitre (input);
+					else ecritLiTitreAlbum (input);
+				}
+			}
+		}
+
+		function cherchetitreIdTitreProg (id1,tmp,template) {
+			var i,c, titreT=[], element,titre="";
+
+			titres[template][tmp-1] = titre;
+			document.getElementById('imt'+tmp).title=titre;
+
+			$.ajax({
+				url: "/WebServices/MoviesWebService.asmx/SearchById",
+				type: "POST",
+				cache: false,
+				data: { "movieid": id1 },
+				contentType: "application/x-www-form-urlencoded",
+				dataType: "xml",
+				crossDomain: false,
+				success: function (data, textStatus, jqXHR) {
+
+					var xml = jqXHR.responseXML.documentElement;
+
+					for (i=0; i<xml.childNodes.length; i++) {
+						element = xml.childNodes[i];
+
+						titreT.push(element.attributes[1].value); //titre du film		
+					}
+
+					titre=titreT[0];
+
+					//alert(titre);
+		
+					titres[template][tmp-1] = titre;
+					document.getElementById('imt'+tmp).title=titre;
+
+					if (id_titre) document.getElementById("titre_img"+(tmp)).innerHTML="Titre : </br/>"+titre;
+
+					metAJourCookie (cookieN);
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					//alert(textStatus+" "+errorThrown);
+					//alert('error');
+				}				
+			});
+		}
+
+		function cherchetitreIdTitreAlbums (id1,tmp,template) {
+			var i,c, titreT=[], element,titre="";
+
+			titres[template][tmp-1] = titre;
+			document.getElementById('imt'+tmp).title=titre;
+
+			$.ajax({
+				url: "/WebServices/AlbumsWebService.asmx/SearchById",
+				type: "POST",
+				cache: false,
+				data: { "albumid": id1 },
+				contentType: "application/x-www-form-urlencoded",
+				dataType: "xml",
+				crossDomain: false,
+				success: function (data, textStatus, jqXHR) {
+
+					var xml = jqXHR.responseXML.documentElement;
+
+					for (i=0; i<xml.childNodes.length; i++) {
+						element = xml.childNodes[i];
+
+						titreT.push(element.attributes[1].value); //titre du film		
+					}
+
+					titre=titreT[0];
+
+					//alert(titre);
+		
+					titres[template][tmp-1] = titre;
+					document.getElementById('imt'+tmp).title=titre;
+
+					if (id_titre) document.getElementById("titre_img"+(tmp)).innerHTML="Titre : </br/>"+titre;
+
+					metAJourCookie (cookieN);
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					//alert(textStatus+" "+errorThrown);
+					//alert('error');
+				}				
+			});
+		}
+
+		function ecritLiTitre (nom1) {
+			var i,c, str="", str1="", element;
+
+			lesNoms=[];
+			lesIds=[];
+
+			$.ajax({
+				url: "/WebServices/MoviesWebService.asmx/SearchByTitle",
+				type: "POST",
+				cache: false,
+				data: { "title": nom1, "orderby": "1" },
+				contentType: "application/x-www-form-urlencoded",
+				dataType: "xml",
+				crossDomain: false,
+				success: function (data, textStatus, jqXHR) {
+					//alert(jqXHR.responseText);
+
+					var xml = jqXHR.responseXML.documentElement;
+					//alert(xml.nodeName);
+					//alert(xml.hasChildNodes());
+					//alert(xml.childNodes[0].childNodes.length);
+					//alert(xml.childNodes[0].attributes[1].value);
+
+					for (i=0; i<xml.childNodes.length; i++) {
+						element = xml.childNodes[i];
+
+						lesIds.push(element.attributes[0].value); //id
+						lesNoms.push(element.attributes[1].value); //titre du film		
+					}
+
+					if (lesNoms.length==0) {
+						str1+='<li>Aucun résultat pour "'+nom1+'"</li>\n';
+					}
+
+					else {
+						for (i=0, c=lesNoms.length; i<c; i++) {
+							str1+='<li id="li'+(i+1)+'" onmouseover="onMouseOverLi(this);" onmouseout="onMouseOutLi(this);" onclick="onClickLi(this);" ondblclick="onDblClickLi(this);">'+lesNoms[i]+' : '+lesIds[i]+'</li>\n';
+						}
+					}
+
+					document.getElementById('listeRec').innerHTML=str1;
+		
+					for (i=0,c=lesNoms.length; i<c; i++) {
+						document.getElementById('li'+(i+1)).style.opacity='0.2';
+						document.getElementById('li'+(i+1)).style.filter="alpha(opacity=20)"; /*IE lt 8*/
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					//alert(textStatus+" "+errorThrown);
+					document.getElementById('listeRec').innerHTML='<li>Impossible de contacter le serveur distant.</li>';
+				}
+			});
+		}
+
+		function ecritLiTitreAlbum (nom1) {
+			var i,c, str="", str1="", element;
+
+			lesNoms=[];
+			lesIds=[];
+
+			$.ajax({
+				url: "/WebServices/AlbumsWebService.asmx/SearchByName",
+				type: "POST",
+				cache: false,
+				data: { "name": nom1, "orderby": "1" },
+				contentType: "application/x-www-form-urlencoded",
+				dataType: "xml",
+				crossDomain: false,
+				success: function (data, textStatus, jqXHR) {
+
+					var xml = jqXHR.responseXML.documentElement;
+
+					for (i=0; i<xml.childNodes.length; i++) {
+						element = xml.childNodes[i];
+
+						lesIds.push('A'+element.attributes[0].value); //id
+						lesNoms.push(element.attributes[1].value); //titre du film		
+					}
+
+					if (lesNoms.length==0) {
+						str1+='<li>Aucun résultat d'+"'"+'album pour "'+nom1+'"</li>\n';
+					}
+
+					else {
+						for (i=0, c=lesNoms.length; i<c; i++) {
+							str1+='<li id="li'+(i+1)+'" onmouseover="onMouseOverLi(this);" onmouseout="onMouseOutLi(this);" onclick="onClickLi(this);" ondblclick="onDblClickLi(this);">'+lesNoms[i]+' : '+lesIds[i]+'</li>\n';
+						}
+					}
+
+					document.getElementById('listeRec').innerHTML=str1;
+		
+					for (i=0,c=lesNoms.length; i<c; i++) {
+						document.getElementById('li'+(i+1)).style.opacity='0.2';
+						document.getElementById('li'+(i+1)).style.filter="alpha(opacity=20)"; /*IE lt 8*/
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					//alert(textStatus+" "+errorThrown);
+					document.getElementById('listeRec').innerHTML='<li>Impossible de contacter le serveur distant.</li>';
+				}
+			});
+		}
+
+		function ecritLiId (id1) {
+			var i,c, str="", str1="", element;
+
+			lesNoms=[];
+			lesIds=[];
+
+			$.ajax({
+				url: "/WebServices/MoviesWebService.asmx/SearchById",
+				type: "POST",
+				cache: false,
+				data: { "movieid": id1 },
+				contentType: "application/x-www-form-urlencoded",
+				dataType: "xml",
+				crossDomain: false,
+				success: function (data, textStatus, jqXHR) {
+					//alert(jqXHR.responseText);
+
+					var xml = jqXHR.responseXML.documentElement;
+					//alert(xml.nodeName);
+					//alert(xml.hasChildNodes());
+					//alert(xml.childNodes[0].childNodes.length);
+					//alert(xml.childNodes[0].attributes[1].value);
+
+					for (i=0; i<xml.childNodes.length; i++) {
+						element = xml.childNodes[i];
+
+						lesIds.push(element.attributes[0].value); //id
+						lesNoms.push(element.attributes[1].value); //titre du film		
+					}
+
+					for (i=0, c=lesNoms.length; i<c; i++) {
+						str1+='<li id="li'+(i+1)+'" onmouseover="onMouseOverLi(this);" onmouseout="onMouseOutLi(this);" onclick="onClickLi(this);" ondblclick="onDblClickLi(this);">'+lesNoms[i]+' : '+lesIds[i]+'</li>\n';
+					}
+
+					document.getElementById('listeRec').innerHTML=str1;
+
+					if (lesNoms.length==0) {
+						str1+='<li>Aucun résultat de programme pour "'+id1+'"</li>\n';
+					}
+					else {
+						for (i=0,c=lesNoms.length; i<c; i++) {
+							document.getElementById('li'+(i+1)).style.opacity='0.2';
+							document.getElementById('li'+(i+1)).style.filter="alpha(opacity=20)"; /*IE lt 8*/
+						}
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					//alert(textStatus+" "+errorThrown);
+					document.getElementById('listeRec').innerHTML='<li>Impossible de contacter le serveur distant.</li>';
+				}
+			});
+		}
+
+		function ecritLiIdAlbum (id1) {
+			var i,c, str="", str1="", element;
+
+			lesNoms=[];
+			lesIds=[];
+
+			$.ajax({
+				url: "/WebServices/AlbumsWebService.asmx/SearchById",
+				type: "POST",
+				cache: false,
+				data: { "albumid": id1 },
+				contentType: "application/x-www-form-urlencoded",
+				dataType: "xml",
+				crossDomain: false,
+				success: function (data, textStatus, jqXHR) {
+					//alert(jqXHR.responseText);
+
+					var xml = jqXHR.responseXML.documentElement;
+					//alert(xml.nodeName);
+					//alert(xml.hasChildNodes());
+					//alert(xml.childNodes[0].childNodes.length);
+					//alert(xml.childNodes[0].attributes[1].value);
+
+					for (i=0; i<xml.childNodes.length; i++) {
+						element = xml.childNodes[i];
+
+						lesIds.push('A'+element.attributes[0].value); //id
+						lesNoms.push(element.attributes[1].value); //titre du film		
+					}
+
+					if (lesNoms.length==0) {
+						str1+='<li>Aucun résultat d'+"'"+'album pour "'+id1+'"</li>\n';
+					}
+					else {
+						for (i=0, c=lesNoms.length; i<c; i++) {
+							str1+='<li id="li'+(i+1)+'" onmouseover="onMouseOverLi(this);" onmouseout="onMouseOutLi(this);" onclick="onClickLi(this);" ondblclick="onDblClickLi(this);">'+lesNoms[i]+' : '+lesIds[i]+'</li>\n';
+						}
+					}
+
+					document.getElementById('listeRec').innerHTML=str1;
+		
+					for (i=0,c=lesNoms.length; i<c; i++) {
+						document.getElementById('li'+(i+1)).style.opacity='0.2';
+						document.getElementById('li'+(i+1)).style.filter="alpha(opacity=20)"; /*IE lt 8*/
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					//alert(textStatus+" "+errorThrown);
+					document.getElementById('listeRec').innerHTML='<li>Impossible de contacter le serveur distant.</li>';
+				}
+			});
+		}
+
+		function sleep(milliseconds) {
+			var start = new Date().getTime();
+			for (var i = 0; i < 1e7; i++) {
+				if ((new Date().getTime() - start) > milliseconds) {
+					break;
+				}
+			}
+		}
+
+		function onMouseOverLi (elt) {
+			if (elt.style.backgroundColor=="white") {
+				elt.style.backgroundColor="lightskyblue";
+				apercuImtRecherche(elt);
+			}
+		}
+
+		function onMouseOutLi (elt) {
+			if (elt.style.backgroundColor!="deepskyblue") {
+				elt.style.backgroundColor="white";
+				backImtTab ();
+			}
+		}
+
+		function onClickLi (elt) {
+			var i, input = elt.id,template=document.getElementById('tab1').parentNode.id;
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			if (elt.style.backgroundColor!="deepskyblue") {
+				for (i=0; i<lesNoms.length; i++) document.getElementById('li'+(i+1)).style.backgroundColor="white";
+				elt.style.backgroundColor="deepskyblue";
+
+				document.getElementById('identifiant_image').value=lesIds[parseInt(input.substring(2,input.length))-1];
+
+				apercuImtRecherche(elt);
+				modifieRadioInput (); //met à jour le radio bouton par rapport à la ref entrée.
+			}
+
+			else {
+				elt.style.backgroundColor="white";
+
+				document.getElementById('identifiant_image').value=refs[template][tmp-1];
+
+				backImtTab ();
+				modifieRadioInput (); //met à jour le radio bouton par rapport à la ref entrée.
+			}
+		}
+
+		function onDblClickLi (elt) {
+			var input = elt.id;
+
+			document.getElementById('identifiant_image').value=lesIds[parseInt(input.substring(2,input.length))-1];
+
+			met_a_jour_imt ();
+
+			fondNoir(0);
+		}
+
+		function apercuImtRecherche (elt) {
+			var template=document.getElementById('tab1').parentNode.id,tmp=0,input="",titre="";
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			tmp = document.getElementById('identifiant_image').name;
+			input = lesIds[parseInt(elt.id.substring(2,elt.id.length))-1];
+
+			if (input!="") {
+				//document.getElementById('identifiant_image').value = input;
+				document.getElementById('imt'+tmp).src = calculUrl (input);
+			}
+
+			else {
+				document.getElementById('identifiant_image').value = "";
+				//document.getElementById('imt'+tmp).src = "Images/Common/photoManquante.jpg";
+			}
+		}
+
+		function backImtTab () {
+			var template=document.getElementById('tab1').parentNode.id, val="";
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			tmp = document.getElementById('identifiant_image').name;
+
+			if (tmp==0) tmp = document.getElementById('identifiant_image').name;
+			else  document.getElementById('identifiant_image').name = tmp;
+
+			val = document.getElementById('identifiant_image').value;
+
+			if (val=="") document.getElementById('imt'+(tmp)).src = "Images/Common/photoManquante.jpg";
+			else document.getElementById('imt'+(tmp)).src = calculUrl (val);
+		}
+
+		function miseAJourTitreTemplate () {
+			var i,str="";
+
+			for (i in refs) {
+				if(!refs.hasOwnProperty(i)) {continue;}
+
+				miseAJourTitres(i);
+			}
+		}
+
+		function miseAJourTitres (template) {
+			var i, tailleT=tailles[template];
+			var str="";
+
+			for (i=0; i<tailleT; i++) {
+				str=refs[template][i];
+
+				if (str=="") return;
+				else if (str.charAt(0)=='A' || str.charAt(0)=='a') cherchetitreIdTitreAlbums (str.substring(1,str.length),i+1,template);
+				else if (str.charAt(0)=='D' || str.charAt(0)=='d' || str.charAt(0)=='N' || str.charAt(0)=='n' || str.charAt(0)=='L' || str.charAt(0)=='l') cherchetitreIdTitreProg (str.substring(1,str.length),i+1,template);
+				else cherchetitreIdTitreProg (str,i+1,template);
+			}
+		}
+
+		function miseAJourTitre (input, tmp, template) {
+			var i=tmp-1, tailleT=tailles[template];
+			var str="";
+
+			str=input;
+
+			if (str=="") return;
+			else if (str.charAt(0)=='A' || str.charAt(0)=='a') cherchetitreIdTitreAlbums (str.substring(1,str.length),i+1,template);
+			else if (str.charAt(0)=='D' || str.charAt(0)=='d' || str.charAt(0)=='N' || str.charAt(0)=='n' || str.charAt(0)=='L' || str.charAt(0)=='l') cherchetitreIdTitreProg (str.substring(1,str.length),i+1,template);
+			else cherchetitreIdTitreProg (str,i+1,template);
+		}
+
+		var deplacePopUp=false;
+		var deplaceAide=false;
+
+		/*function deplacePopUp (event) {
+			var elt = document.getElementById("pop-up");
+			var eltAide = document.getElementById("aide");
+
+			var x = event.clientX;
+			var y = event.clientY;
+
+			if (deplacePopUp) {
+				elt.style.marginLeft=x-350;
+				elt.style.marginTop=y-150;
+			}
+
+			if (deplaceAide) {
+				eltAide.style.marginLeft=750+x-780;
+				eltAide.style.marginTop=150+y-185;
+			}
+		}*/
+
+		function deplaceClickPopUp () {
+			if (deplacePopUp) deplacePopUp=false;
+			else deplacePopUp=true;
+		}
+
+		function deplaceClickAide () {
+			if (deplaceAide) deplaceAide=false;
+			else deplaceAide=true;
+		}
+
+		var dragged = null;
+
+		function start_drag(objet) {
+			dragged = objet;
+		}
+
+		function drag_onmousemove(event) {
+			if (dragged) {
+				var x = event.clientX;
+				var y = event.clientY;
+				dragged.style.position = 'absolute';
+
+				if (deplaceAide) {
+					dragged.style.left = x-880 + 'px';
+					dragged.style.top = y-290 + 'px';
+				}
+
+				if (deplacePopUp) {
+					dragged.style.left = x-566 + 'px';
+					dragged.style.top = y-166 + 'px';
+				}
+			}
+		}
+
+		function drag_onmouseup(event) {
+			dragged = null;
+		}
+
+		function addEvent(obj, event, fct) {
+			if (obj.attachEvent)
+				obj.attachEvent('on' + event, fct);
+			else
+				obj.addEventListener(event, fct, true);
+		}
+
+		addEvent(document, 'mousemove', drag_onmousemove);
+		addEvent(document, 'mouseup', drag_onmouseup);
+
+		function affiche_id_titre () {
+			var i,template=document.getElementById('tab1').parentNode.id;
+
+			if (template=="toutes les series/ a l'affiche") template="toutes les series/ a laffiche";
+
+			if (id_titre) {
+				for (i=0; i<taille; i++) {
+					if (refs[template][i]!="") document.getElementById("id_titre"+(i+1)).style.visibility = "hidden";
+				}
+
+				id_titre = false;
+			}
+
+			else {
+				for (i=0; i<taille; i++) {
+					if (refs[template][i]!="") {
+						document.getElementById("id_titre"+(i+1)).style.visibility = "visible";
+						document.getElementById("id_img"+(i+1)).innerHTML="Identifiant : <br/>"+refs[template][i];
+						document.getElementById("titre_img"+(i+1)).innerHTML="Titre : </br/>"+titres[template][i];
+					}
+				}
+
+				id_titre = true;
+			}
+		}
+
+	</script>
+
+	<style>
+		.couv_recherche {
+			display: none;
+		}
+
+		#tab1 {
+			text-transform : uppercase;
+			font-style : "Calibri (Corps)";
+			text-align : left;
+			font-size : 14px;
+			font-weight : bold;
+
+			/*color : #FF9900;*/
+			/*color : #0F30D7;*/
+			/*color : #18FFED;*/
+
+			//text-shadow : 1px 1px 1px grey;
+		}
+
+		.rp {
+			position : absolute;
+			z-index : 2;
+
+			left : 5px;
+			top : 5px;
+
+			display: none;
+		}
+
+		#met_a_jour {
+			float : right;
+
+			display : none;
+		}
+
+		.imm, .imt {
+			position : absolute;
+
+			width : 198px;
+			height : 276px;
+
+			border : 3px solid #303835;
+		}
+
+		.imc {
+			position : absolute;
+
+			left : 168px;
+			top : 6px;
+
+			visibility : hidden;
+			display : none;
+		}
+
+		.case {
+			position : relative;
+
+			width : 201px;
+			height : 279px;
+		}
+
+		.cache3,.cache3_ag {
+			position : absolute;
+
+			/*background-color : grey;*/
+
+			visibility : hidden;
+		}
+
+		.cache3 {
+			left : 179px;
+			top : 8px;
+
+			width : 16px;
+			height : 16px;
+
+			z-index : 6;
+		}
+
+		.cache3_ag {
+			left : 384px;
+			top : 8px;
+
+			width : 16px;
+			height : 16px;
+
+			z-index : 6;
+		}
+
+		.imt_ag, .imm_ag {
+			/*imt agrandie*/
+			position : absolute;
+
+			width: 405px;
+			height: 562px;
+
+			border : 3px solid #303835;
+		}
+
+		.case_ag {
+			position : relative;
+
+			width : 408px;
+			height : 565px;
+		}
+
+		.imc_ag {
+			position : absolute;
+
+			left : 376px;
+			top : 6px;
+
+			visibility : hidden;
+			display : none;
+		}
+
+		#operateur {
+			position : absolute;
+
+			right : 600px;
+		}
+
+		#template {
+			position : absolute;
+
+			right : 250px;
+		}
+
+		#OperateurM {
+			position : absolute;
+			margin-top : 1px;
+			width : 73px;
+			padding-right : 60px;
+			right : 800px;
+		}
+
+		#TemplateM {
+			position : absolute;
+			margin-top : 1px;
+			width : 70px;
+			padding-right : 60px;
+			right : 450px;
+		}
+
+		#article {
+			position : relative;
+
+			top : 65px;
+		}
+
+		#boutons1 {
+			position : relative;
+
+			float : right;
+		}
+
+		#cache01,#cache02,#cache03 {
+			position : absolute;
+
+			background-color : black;
+
+			opacity : 0;
+			filter : alpha(opacity=0); /*IE lt 8*/
+		}
+
+		#cache01 {
+			width : 32px;
+			height : 32px;
+
+			left : 67px;
+		}
+
+		#cache02 {
+			width : 27px;
+			height : 32px;
+		}
+
+		#cache03 {
+			width : 32px;
+			height : 32px;
+
+			left : 31px;
+		}
+
+		#fond_noir1 {
+			position : fixed;
+
+			width : 100%;
+			height : 100%;
+
+			left : 0px;
+			top : 0px;
+
+			background-color : black;
+
+			z-index : 4;
+
+			opacity: 0.0;
+
+			filter : alpha(opacity=00); /*IE lt 8*/
+
+			display : none;
+		}
+
+		#fond_noir2 {
+			position : fixed;
+
+			width : 100%;
+			height : 100%;
+
+			left : 0px;
+			top : 0px;
+
+			background-color : black;
+
+			z-index : 4;
+
+			opacity: 0.0;
+
+			filter : alpha(opacity=00); /*IE lt 8*/
+
+			display : none;
+		}
+
+		#dialog {
+			width : 335px;
+		}
+
+		#deplacement {
+			position : absolute;
+
+			right : 5px;
+			top : 5px;
+
+			z-index=50;
+		}
+
+		#cache06 {
+			position : absolute;
+
+			right : 5px;
+			top : 5px;
+
+			width : 20px;
+			height : 20px;
+
+			background-color : black;
+
+			opacity : 0;
+			filter : alpha(opacity=0); /*IE lt 8*/
+
+			z-index=51;
+		}
+
+		#barre {
+			position : relative;
+
+			width: 422px;
+			height: 30px;
+			background-color: #00B050;
+
+			margin-left : -42px;
+			margin-top : -22px;
+
+			cursor:  default;
+
+			z-index: 6;
+		}
+
+		#fermePop-up {
+			position : relative;
+
+			margin-top : 3px;
+			margin-left : 388px;
+
+			font-size : 8px;
+			width : 25px;
+			height : 25px;
+		}
+
+		#pop-up {
+			position : fixed;
+			box-shadow: 3px 3px 12px black;
+			/*color: #0E1A0E;*/
+			color : #ffffff;
+			margin-left: 350px;
+			margin-right: 350px;
+			margin-top: 150px;
+			/*background-color: #29A329;*/
+			background-color: #202B20;
+			padding: 20px 25px 25px 40px;
+			border: 3px solid black;
+			font-style : "Segoe UI,Arial,sans-serif";
+			float: none;
+			z-index: 5;
+			opacity: 0.98;
+			filter : alpha(opacity=98); /*IE lt 8*/
+
+			width : 355px;
+			/*width : 600px;*/
+			cursor:  default; /*empêche la souris de passer en mode curseur de texte.*/
+
+			display : none;
+		}
+
+		.submitionPop-up  {
+			margin-left : 0px;
+			width : 100px;
+		}
+
+		#listeRec {
+			position : absolute;
+
+			margin-left : 318px;
+			margin-top : 2px;
+
+			list-style-type : none; /*fait disparaître les puces de la liste*/
+
+			font-style : "Calibri (Corps)";
+
+			width : 260px;
+			height : 230px;
+
+			background-color : white;
+
+			overflow-y:scroll;
+			overflow-x:hidden;
+
+			visibility : hidden;
+
+			cursor:  default; /*empêche la souris de passer en mode curseur de texte.*/
+
+			color : black;
+		}
+
+		#aide {
+			position : absolute;
+			box-shadow: 3px 3px 12px #626262;
+
+			margin-top : 185px;
+			margin-left : 780px;
+
+			width : 200px;
+			height : 230px;
+
+			cursor:  default; /*empêche la souris de passer en mode curseur de texte.*/
+
+			background-color : yellow;
+			border: 3px solid #626262;
+
+			/*opacity : 0.6;
+			filter : alpha(opacity=60);*/ /*IE lt 8*/
+
+			display : none;
+		}
+
+		#aide p {
+			position : relative;
+
+			color : #626262;
+
+			font-size : 15px;
+			top : 0px;
+			left : 2px;
+		}
+
+		#aideB {
+			position : absolute;
+			
+			top : 72px;
+
+			margin-left : 287px;
+
+			/*border: 1px solid grey;*/
+
+			width : 19px;
+			height : 19px;
+
+			left : 0px;
+		}
+
+		#cache04 {
+			position : absolute;
+			
+			top : 70px;
+
+			margin-left : 284px;
+
+			/*border: 1px solid grey;*/
+
+			width : 16px;
+			height : 16px;
+
+			left : 0px;
+		}
+
+		#rechercher {
+			position : absolute;
+			
+			top : 190px;
+
+			margin-left : 288px;
+
+			border: 2px solid #BEBEBE;
+
+			width : 19px;
+			height : 19px;
+
+			left : 0px;
+		}
+
+		#cache05 {
+			position : absolute;
+			
+			top : 188px;
+
+			margin-left : 284px;
+
+			width : 16px;
+			height : 16px;
+
+			left : 0px;
+		}
+
+		/*#identifiant_image, #recherche_input {
+			position : absolute;
+			margin-top : 3px;
+
+			width : 150px;
+
+			top : 3px;
+			left : 128px;
+		}*/
+
+		#identifiant_image {
+			position : absolute;
+
+			left : 120px;
+
+			top : 68px;
+		}
+
+		#recherche_input {
+			position : absolute;
+
+			left : 120px;
+
+			top : 186px;
+		}
+
+		#fermer {
+			position : relative;
+		}
+
+		#reduireRech {
+			position : absolute;
+
+			top : 269px;
+			left : 365px;
+
+			width : 16px;
+			heigth : 16px;
+
+			/*background-image: url("Images/Common/reduire.jpg");*/
+
+			visibility : hidden;
+		}
+
+		.id_titre {
+			position : absolute;
+
+			width : 180px;
+			height : 150px;
+
+			left : 7%;
+			top : 15%;
+	
+			background-color : white;
+			color : black;
+
+			visibility : hidden;
+		}
+
+		#slider {
+			position : absolute;
+
+			width : 150px;
+			/*height : 15px;*/
+
+			right : 5px;
+			top : 60px;
+		}
+
+		body {
+			background-color : #303835;
+			color : white;
+		}
+
+	</style>
+</head>
+<body id="bodyId">
+	<div id="pop-up" class="ui-corner-all">
+		<div id="barre" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix ui-draggable-handle" onmousedown=""  onmouseup="">
+			<form><input type="button" value="X" id="fermePop-up" class="ui-button ui-widget ui-state-default ui-corner-all" onmousedown="M_dCacheJUi(this);" onmouseup="M_uCacheJUi(this);" onmouseover="M_ovCacheJUi(this);" onmouseout="M_ouCacheJUi(this);" onfocus="M_sCacheJUi(this);" onblur="M_bCacheJUi(this);" onclick="fondNoir (0);"/>
+		</div>
+		<div>
+		<form method="POST" class="entree_ref" id="dialog">
+			<!--img id="deplacement" src="Images/Common/deplacement.jpg" title="Déplacer la fenêtre de modifications" alt="Déplacer la fenêtre de modifications" onclick="deplaceClickPopUp();" />-->
+			<!--<div id="cache06" title="Déplacer la fenêtre de modifications" onmousedown="M_dCache(this);" onmouseup="M_uCache(this);" onmouseover="M_ovCache(this);" onmouseout="M_ouCache(this);" onclick="deplaceClickPopUp();"></div>-->
+
+			<ul id="listeRec" onselectstart="return false">
+			</ul>
+
+			<span onselectstart="return false">Type de visuel : 
+			<label><input id="radioProg" type="radio" name="visuel" checked value="programme" onclick="modifieInputDialog (4,this);">Programme : </label>
+			<label><input id="radioAlbum" type="radio" name="visuel" value="album" onclick="modifieInputDialog (3,this);">Album</label>
+			</span>
+
+			<br/><br/>
+			<label for="id">Identifiant :</label>
+			<input id="identifiant_image" type="text" name="1" placeholder="Entrer une référence"/>
+			<!--img src="Images/Common/aide.jpg" alt="Syntaxe des options pour l'identifiant de l'image" id="aideB"/ onselectstart="return false"-->
+			<div id="cache04" class="ui-state-default ui-corner-all ui-icon ui-icon-help" title="Syntaxe des options pour l'identifiant de l'image" onmousedown="M_dCacheJUi(this);" onmouseup="M_uCacheJUi(this);" onmouseover="M_ovCacheJUi(this);" onmouseout="M_ouCacheJUi(this);" onclick="fondNoir2 ()" onselectstart="return false"></div>
+
+			<br/><br/>
+			<span id="spanRadio2" onselectstart="return false">
+			<label><input id="radio0" type="radio" name="image" checked value="normal" onclick="modifieInputDialog (0,this)">Normal</label>
+			<label><input id="radio1" type="radio" name="image" value="light" onclick="modifieInputDialog (1,this)">Light</label>
+			<label><input id="radio2" type="radio" name="image" value="dark" onclick="modifieInputDialog (2,this)">Dark</label><br/>
+			</span>
+
+			<br/>
+
+			<span onselectstart="return false">Rechercher par : 
+			<label><input id="radio5" type="radio" name="recherche" value="id" onclick="modifieInputDialog (5,this);">Identifiant : </label>
+			<label><input id="radio6" type="radio" checked name="recherche" value="titre" onclick="modifieInputDialog (6,this)">Titre</label>
+			</span>
+
+			<br/><br/>
+			<label for="search" onselectstart="return false">Rechercher :</label>
+			<input id="recherche_input" type="search" placeholder="Rechercher"/>
+			<!--img src="Images/Common/rechercher.jpg" alt="Rechercher" id="rechercher"/-->
+			<div id="cache05" class="ui-state-default ui-corner-all ui-icon ui-icon-search" title="Rechercher" alt="Recherche" onmousedown="M_dCacheJUi(this);" onmouseup="M_uCacheJUi(this);" onmouseover="M_ovCacheJUi(this);" onmouseout="M_ouCacheJUi(this);" onclick="actionneRecherche (); return false;" onselectstart="return false"></div></br></br>
+
+			<label for="titre film" onselectstart="return false"></label><br/>
+			<img class="couv_recherche" src="" alt="Image couverture du film" onselectstart="return false"/>
+
+			<span onselectstart="return false">
+			<input class="submitionPop-up ui-button ui-state-default ui-corner-all" type="submit" value="Ok" id="lien" href="" onmousedown="M_dCacheJUi(this);" onmouseup="M_uCacheJUi(this);" onmouseover="M_ovCacheJUi(this);" onmouseout="M_ouCacheJUi(this);" onfocus="M_sCacheJUi(this);" onblur="M_bCacheJUi(this);" onclick="met_a_jour_imt (); fondNoir (0); return false;"/>
+			<input class="submitionPop-up ui-button ui-state-default ui-corner-all" type="submit" value="Aperçu" onmousedown="M_dCacheJUi(this);" onmouseup="M_uCacheJUi(this);" onmouseover="M_ovCacheJUi(this);" onmouseout="M_ouCacheJUi(this);" onfocus="M_sCacheJUi(this);" onblur="M_bCacheJUi(this);" onclick="apercuImt (); return false;">
+			<input class="submitionPop-up ui-button ui-state-default ui-corner-all" type="submit" value="Annuler" id="lien" href="" onmousedown="M_dCacheJUi(this);" onmouseup="M_uCacheJUi(this);" onmouseover="M_ovCacheJUi(this);" onmouseout="M_ouCacheJUi(this);" onfocus="M_sCacheJUi(this);" onblur="M_bCacheJUi(this);" onclick="fondNoir (0); return false;"/>
+			</span>
+		</form>
+		<div id="reduireRech" class="ui-icon ui-icon-arrowstop-1-w ui-state-default ui-corner-all" title="Fermer la recherche" onmousedown="M_dCacheJUi(this);" onmouseup="M_uCacheJUi(this);" onmouseover="M_ovCacheJUi(this);" onmouseout="M_ouCacheJUi(this);" onclick="enleveBarreRecherche ();"></div>
+		</div>
+	</div>
+
+	<div id="aide" onmousedown="" onmouseup="">
+		<p id="aideP">
+			Syntaxe des options pour les images : </br></br>
+
+			N*id ou id : image normale</br>
+			L*id : image light</br>
+			D*id : image dark</br>
+			A*id : image d'album</br></br>
+
+			Si l'image ne s'affiche pas, cela veut dire qu'elle n'est pas disponible.
+
+			<!--</br></br><a id="fermer" href="" onclick="fondNoir2 (); return false;">Fermer</a>-->
+		</p>
+	</div>
+
+	<div id="fond_noir1" onclick="fondNoir (0)"></div>
+	<div id="fond_noir2" onclick="fondNoir2 ()"></div>
+
+	<div id="table1">
+		<div id="boutons1">
+			<div>
+				<div id="cache01" title="Activer le mode saisie rapide" onmousedown="M_dCache(this);" onmouseup="M_uCache(this);" onmouseover="M_ovCache(this);" onmouseout="M_ouCache(this);" onclick="afficheUrl ();"></div>
+				<div id="cache02" title="Afficher l'ensemble des pages" onmousedown="M_dCache(this);" onmouseup="M_uCache(this);" onmouseover="M_ovCache(this);" onmouseout="M_ouCache(this);"></div>
+				<div id="cache03" title="Afficher les identifiants et les titres des visuels" onmousedown="M_dCache(this);" onmouseup="M_uCache(this);" onmouseover="M_ovCache(this);" onmouseout="M_ouCache(this);" onclick="affiche_id_titre ();"></div>
+			</div>
+
+			<div>
+				<p id="OperateurM">Opérateur : </p>
+
+				<form id="operateur">
+					<select name="nom" size="1" id="operateursId" onchange="litListeOperateur (this);">
+						<option selected>INFINITY TV BOUYGTEL ET ORANGE</option>
+						<option>CANALPLAY TV FREE</option>
+						<option>CANALPLAY TV FREE ABONNE</option>
+					</select>
+				</form>
+
+				<p id="TemplateM">Template : </p>
+
+				<form id="template">
+					<select name="nom" size="1" id="templatesId" onchange="litListeTemplate (this);">
+						<option selected>TOUS LES FILMS</option>
+						<option>TOUS LES FILMS / NOUVEAU</option>
+						<option>TOUTES LES SERIES</option>
+						<option>TOUTES LES SERIES/ A l'AFFICHE</option>
+						<option>ACTION</option>
+						<option>COMEDIE</option>
+						<option>FAMILLE ET KIDS</option>
+						<option>FAMILLE ET KIDS / FILMS JEUNESSE</option>
+						<option>EMOTION</option>
+						<option>FRISSON</option>
+						<option>DEMODE</option>
+					</select>
+				</form>
+
+				<img class="choix_du_template" src="Images/Common/choix_du_template.jpg" alt="choix du template"/>
+				<img class="affiche_id_titre" src="Images/Common/afficheIdTitre_32_32.jpg" title="Afficher les identifiants et les titres des visuels" alt="Affiche les identifiants et les titres des visuels"/>
+				<img class="remplissage_Rapide" src="Images/Common/RemplissageRapide.jpg" alt="saisie rapide"/>
+
+				<!--[if !IE]><!-->
+					<!--form id="taille_img"><input type="range" min="0" max="200"/ onmouseup="alert(this.value);"></form-->
+				<!--<![endif]-->				
+			</div>
+		</div>
+
+		<!--div id="slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 19%;"></span></div-->
+
+		<div id="article">
+
+		</div>
+	</div>
+
+	<script>
+		$('#aide').draggable();
+
+		//$('#pop-up').resizable();
+		$('#pop-up').draggable();
+		$('#slider').slider();
+	</script>
+
+	<script>
+		function lanceScript () {
+			litListeTemplate (document.getElementById('templatesId'));
+			litListeOperateur (document.getElementById('operateursId'));
+			//document.getElementById('operateursId').selectedIndex = "INFINITY TV BOUYGTEL ET ORANGE";
+			//document.getElementById('templatesId').selectedIndex = "TOUS LES FILMS";
+	
+			//alert(document.getElementById('tab1').parentNode.id);
+			//metAJourCBImt ();
+		}
+
+		lanceScript ();
+	</script>
+
+</body>
+</html>
